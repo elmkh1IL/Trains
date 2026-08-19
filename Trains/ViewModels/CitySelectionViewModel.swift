@@ -62,7 +62,7 @@ final class CitySelectionViewModel: ObservableObject {
 
         } catch {
 
-            print("❌ loadCities error:", error)
+            print("loadCities error:", error)
             
             let nsError = error as NSError
 

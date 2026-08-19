@@ -99,27 +99,11 @@ final class CarrierListViewModel: ObservableObject {
             allCarriers = carriers
             screenState = .content
 
-            print(
-                "✅ Carriers loaded:",
-                carriers.count
-            )
-
-            print(
-                "✅ From code:",
-                fromPoint.station.code
-            )
-
-            print(
-                "✅ To code:",
-                toPoint.station.code
-            )
+            print("Carriers loaded:", carriers.count)
 
         } catch {
 
-            print(
-                "❌ Carriers error:",
-                error
-            )
+            print("Carriers error:", error)
 
             let nsError = error as NSError
 

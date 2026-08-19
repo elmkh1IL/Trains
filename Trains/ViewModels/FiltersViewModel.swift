@@ -37,9 +37,7 @@ final class FiltersViewModel: ObservableObject {
         draft.periods.contains(period)
     }
 
-    func isTransferOptionSelected(
-        _ option: TransferOption
-    ) -> Bool {
+    func isTransferOptionSelected(_ option: TransferOption) -> Bool {
         draft.transfers == option
     }
 }

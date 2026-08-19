@@ -8,22 +8,22 @@ import Foundation
 import OpenAPIURLSession
 
 final class StationsService: StationsServiceProtocol {
-
+    
     static let shared = StationsService()
-
+    
     private let allStationsService: AllStationsServiceProtocol
-
+    
     private var cachedCities: [City]?
-
+    
     private init() {
         let client = Client(
             serverURL: try! Servers.Server1.url(),
             transport: URLSessionTransport()
         )
-
+        
         self.allStationsService = AllStationsService(
             client: client,
-            apikey: "a02b4c80-937e-4481-9aba-3a58bd132056"
+            apikey: APIConstants.apiKey
         )
     }
 
@@ -40,10 +40,6 @@ final class StationsService: StationsServiceProtocol {
         }
 
         let response = try await allStationsService.getAllStations()
-        print(
-            "✅ Countries from API:",
-            response.countries?.count ?? 0
-        )
 
         var cities: [City] = []
 
@@ -95,11 +91,6 @@ final class StationsService: StationsServiceProtocol {
                 }
             }
         }
-        
-        print(
-            "✅ Converted cities:",
-            cities.count
-        )
 
         cities.sort {
             $0.name.localizedCaseInsensitiveCompare(

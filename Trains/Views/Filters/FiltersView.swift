@@ -154,9 +154,7 @@ struct FiltersView: View {
         }
     }
 
-    private func transferRow(
-        _ option: TransferOption
-    ) -> some View {
+    private func transferRow(_ option: TransferOption) -> some View {
 
         Button {
 

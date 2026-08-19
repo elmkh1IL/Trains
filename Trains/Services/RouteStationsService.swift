@@ -47,7 +47,7 @@ func testFetchRouteStations() {
 
             let scheduleService = ScheduleBetweenStationsService(
                 client: client,
-                apikey: "a02b4c80-937e-4481-9aba-3a58bd132056"
+                apikey: APIConstants.apiKey
             )
 
             let schedule = try await scheduleService.getScheduleBetweenStations(
@@ -67,7 +67,7 @@ func testFetchRouteStations() {
 
             let routeService = RouteStationsService(
                 client: client,
-                apikey: "a02b4c80-937e-4481-9aba-3a58bd132056"
+                apikey: APIConstants.apiKey
             )
 
             let route = try await routeService.getRouteStations(

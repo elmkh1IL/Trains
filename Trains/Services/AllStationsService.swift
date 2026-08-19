@@ -68,7 +68,7 @@ func testFetchAllStations() {
 
             let service = AllStationsService(
                 client: client,
-                apikey: "a02b4c80-937e-4481-9aba-3a58bd132056"
+                apikey: APIConstants.apiKey
             )
 
             print("Fetching all stations...")
