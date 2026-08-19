@@ -50,7 +50,9 @@ func testFetchCarrierInfo() {
 
             let schedule = try await scheduleService.getScheduleBetweenStations(
                 fromStation: "c146",
-                toStation: "c213"
+                toStation: "c213",
+                date: "2026-08-18",
+                transfers: true
             )
 
             guard let carrierCode = schedule
