@@ -92,7 +92,7 @@ struct MainView: View {
                         selectionDirection = .to
                     }
                 }
-                .background(AppColors.background)
+                .background(Color.white)
                 .clipShape(
                     RoundedRectangle(
                         cornerRadius: 20
@@ -119,7 +119,7 @@ struct MainView: View {
                         width: 44,
                         height: 44
                     )
-                    .background(AppColors.background)
+                    .background(Color.white)
                     .clipShape(Circle())
                 }
             }
@@ -150,8 +150,8 @@ struct MainView: View {
                     .font(.system(size: 17))
                     .foregroundStyle(
                         text.isEmpty
-                        ? Color.secondary
-                        : Color.primary
+                        ? Color.gray
+                        : Color.black
                     )
                     .lineLimit(1)
                     

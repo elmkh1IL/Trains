@@ -64,57 +64,46 @@ struct CarrierRow: View {
                 ) {
 
                     Text(carrier.name)
-                        .font(
-                            .system(size: 17)
-                        )
+                        .font(.system(size: 17))
+                        .foregroundStyle(.black)
 
                     if let transfer =
                         carrier.transferText {
 
                         Text(transfer)
-                            .font(
-                                .system(
-                                    size: 12
-                                )
-                            )
-                            .foregroundStyle(
-                                Color.red
-                            )
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color.red)
                     }
                 }
 
                 Spacer()
 
                 Text(carrier.date)
-                    .font(
-                        .system(size: 12)
-                    )
+                    .font(.system(size: 12))
+                    .foregroundStyle(.black)
             }
 
             HStack(spacing: 8) {
 
-                Text(
-                    carrier.departureTime
-                )
+                Text(carrier.departureTime)
+                    .foregroundStyle(.black)
 
                 line
 
                 Text(carrier.duration)
-                    .font(
-                        .system(size: 12)
-                    )
+                    .font(.system(size: 12))
+                    .foregroundStyle(.black)
 
                 line
 
-                Text(
-                    carrier.arrivalTime
-                )
+                Text(carrier.arrivalTime)
+                    .foregroundStyle(.black)
             }
             .font(.system(size: 17))
         }
         .padding(16)
         .background(
-            AppColors.searchBackground
+            AppColors.carrierCard
         )
         .clipShape(
             RoundedRectangle(
@@ -126,10 +115,7 @@ struct CarrierRow: View {
     private var line: some View {
 
         Rectangle()
-            .fill(
-                Color.secondary
-                    .opacity(0.4)
-            )
+            .fill(AppColors.cardLine)
             .frame(height: 1)
     }
 }

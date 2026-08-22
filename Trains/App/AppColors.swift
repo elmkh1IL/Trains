@@ -7,18 +7,21 @@
 import SwiftUI
 
 enum AppColors {
-
+    
     static let blue = Color(
         red: 55 / 255,
         green: 114 / 255,
         blue: 231 / 255
     )
-
-    static let background = Color(uiColor: .systemBackground)
-
-    static let secondaryBackground =
-        Color(uiColor: .secondarySystemBackground)
-
-    static let searchBackground =
-        Color(uiColor: .systemGray6)
+    
+    static let background = Color("YP Background")
+    
+    static let searchBackground = Color("YP Search Background")
+    
+    static let carrierCard = Color("YP Carrier Card")
+    
+    static let cardLine = Color("YP Card Line")
+    
+    static let secondaryBackground = Color(uiColor: .secondarySystemBackground)
+    
 }

@@ -8,7 +8,6 @@ import Foundation
 import OpenAPIURLSession
 
 protocol CarrierScheduleServiceProtocol {
-    
     func getCarriers(from: String, to: String) async throws -> [Carrier]
 }
 
@@ -68,48 +67,16 @@ final class CarrierScheduleService: CarrierScheduleServiceProtocol {
             }
             
             let carrier = Carrier(
-                name:
-                    apiCarrier.title
-                ?? "Перевозчик",
-                
-                logoURL:
-                    makeLogoURL(
-                        from: apiCarrier.logo
-                    ),
-                
-                code:
-                    apiCarrier.code,
-                
-                date:
-                    formatDate(
-                        departure,
-                        fallbackDate: requestDate
-                    ),
-                
-                departureTime:
-                    formatTime(departure),
-                
-                arrivalTime:
-                    formatTime(arrival),
-                
-                duration:
-                    formatDuration(
-                        segment.duration ?? 0
-                    ),
-                
-                transferText:
-                    segment.has_transfers == true
-                ? "С пересадкой"
-                : nil,
-                
-                hasTransfer:
-                    segment.has_transfers
-                ?? false,
-                
-                departureHour:
-                    getHour(
-                        from: departure
-                    )
+                name: apiCarrier.title ?? "Перевозчик",
+                logoURL: makeLogoURL(from: apiCarrier.logo),
+                code: apiCarrier.code,
+                date: formatDate(departure, fallbackDate: requestDate),
+                departureTime: formatTime(departure),
+                arrivalTime: formatTime(arrival),
+                duration: formatDuration(segment.duration ?? 0),
+                transferText: segment.has_transfers == true ? "С пересадкой" : nil,
+                hasTransfer: segment.has_transfers ?? false,
+                departureHour: getHour(from: departure)
             )
             
             carriers.append(carrier)

@@ -34,25 +34,15 @@ struct SearchField: View {
 
                 } label: {
 
-                    Image(
-                        systemName:
-                            "xmark.circle.fill"
-                    )
-                    .foregroundStyle(
-                        .secondary
-                    )
+                    Image(systemName: "xmark.circle.fill")
+                    .foregroundStyle(.secondary)
                 }
             }
         }
         .padding(.horizontal, 8)
         .frame(height: 36)
-        .background(
-            AppColors.searchBackground
-        )
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: 10
-            )
+        .background(AppColors.searchBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 10)
         )
     }
 }

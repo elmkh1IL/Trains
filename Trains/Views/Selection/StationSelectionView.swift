@@ -48,12 +48,7 @@ struct StationSelectionView: View {
                 Spacer()
 
                 Text("Станция не найдена")
-                    .font(
-                        .system(
-                            size: 24,
-                            weight: .bold
-                        )
-                    )
+                    .font(.system(size: 24, weight: .bold))
 
                 Spacer()
 
@@ -73,9 +68,7 @@ struct StationSelectionView: View {
 
                             } label: {
 
-                                SelectionRow(
-                                    title: station.name
-                                )
+                                SelectionRow(title: station.name)
                             }
                             .buttonStyle(.plain)
                         }
