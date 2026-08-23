@@ -422,7 +422,7 @@ paths:
         "200":
           description: Успешный ответ
           content:
-            text/html; charset=utf-8:
+            'text/html; charset=utf-8':
               schema:
                 $ref: '#/components/schemas/AllStationsResponse'
   /v3.0/copyright/:
@@ -524,6 +524,9 @@ components:
         duration:
           type: integer
           description: Длительность рейса в секундах
+        has_transfers:
+          type: boolean
+          description: Признак наличия пересадок
     Pagination:
       type: object
       properties:

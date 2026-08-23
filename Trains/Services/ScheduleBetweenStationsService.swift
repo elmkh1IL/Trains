@@ -8,30 +8,53 @@
 import OpenAPIRuntime
 import OpenAPIURLSession
 
-typealias ScheduleBetweenStationsResponse  = Components.Schemas.Segments
+typealias ScheduleBetweenStationsResponse =
+    Components.Schemas.Segments
 
 protocol ScheduleBetweenStationsServiceProtocol {
-    func getScheduleBetweenStations(fromStation: String, toStation: String) async throws -> ScheduleBetweenStationsResponse
+
+    func getScheduleBetweenStations(
+        fromStation: String,
+        toStation: String,
+        date: String,
+        transfers: Bool
+    ) async throws -> ScheduleBetweenStationsResponse
 }
 
-final class ScheduleBetweenStationsService: ScheduleBetweenStationsServiceProtocol {
-    
+final class ScheduleBetweenStationsService:
+    ScheduleBetweenStationsServiceProtocol {
+
     private let client: Client
     private let apikey: String
-    
-    init(client: Client, apikey: String) {
+
+    init(
+        client: Client,
+        apikey: String
+    ) {
         self.client = client
         self.apikey = apikey
     }
-    
-    func getScheduleBetweenStations(fromStation: String, toStation: String) async throws -> ScheduleBetweenStationsResponse {
-        
-        let response = try await client.getScheduleBetweenStations(query: .init(
-            apikey: apikey,
-            from: fromStation,
-            to: toStation
-        ))
-        
+
+    func getScheduleBetweenStations(
+        fromStation: String,
+        toStation: String,
+        date: String,
+        transfers: Bool
+    ) async throws -> ScheduleBetweenStationsResponse {
+
+        let response =
+            try await client.getScheduleBetweenStations(
+                query: .init(
+                    apikey: apikey,
+                    from: fromStation,
+                    to: toStation,
+                    format: "json",
+                    lang: "ru_RU",
+                    date: date,
+                    transfers: transfers
+                )
+            )
+
         return try response.ok.body.json
     }
 }
@@ -46,14 +69,16 @@ func testFetchScheduleBetweenStations() {
 
             let service = ScheduleBetweenStationsService(
                 client: client,
-                apikey: "a02b4c80-937e-4481-9aba-3a58bd132056"
+                apikey: APIConstants.apiKey
             )
 
             print("Fetching schedule between stations...")
 
             let schedule = try await service.getScheduleBetweenStations(
                 fromStation: "c146",
-                toStation: "c213"
+                toStation: "c213",
+                date: "2026-08-18",
+                transfers: true
             )
 
             print("Successfully fetched schedule between stations:")

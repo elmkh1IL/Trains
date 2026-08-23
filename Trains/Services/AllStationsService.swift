@@ -29,16 +29,19 @@ final class AllStationsService: AllStationsServiceProtocol {
         
         let response = try await client.getAllStations(
             query: .init(
-                apikey: apikey
+                apikey: apikey,
+                lang: "ru_RU",
+                format: "json"
             )
         )
         
         let responseBody = try response.ok.body
         
         switch responseBody {
+            
         case .text_html_charset_utf_hyphen_8(let body):
             
-            let limit = 50 * 1024 * 1024 // 50 MB
+            let limit = 50 * 1024 * 1024
             
             let fullData = try await Data(
                 collecting: body,
@@ -65,7 +68,7 @@ func testFetchAllStations() {
 
             let service = AllStationsService(
                 client: client,
-                apikey: "a02b4c80-937e-4481-9aba-3a58bd132056"
+                apikey: APIConstants.apiKey
             )
 
             print("Fetching all stations...")

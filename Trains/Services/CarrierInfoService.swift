@@ -45,12 +45,14 @@ func testFetchCarrierInfo() {
 
             let scheduleService = ScheduleBetweenStationsService(
                 client: client,
-                apikey: "a02b4c80-937e-4481-9aba-3a58bd132056"
+                apikey: APIConstants.apiKey
             )
 
             let schedule = try await scheduleService.getScheduleBetweenStations(
                 fromStation: "c146",
-                toStation: "c213"
+                toStation: "c213",
+                date: "2026-08-18",
+                transfers: true
             )
 
             guard let carrierCode = schedule
@@ -68,7 +70,7 @@ func testFetchCarrierInfo() {
 
             let carrierService = CarrierInfoService(
                 client: client,
-                apikey: "a02b4c80-937e-4481-9aba-3a58bd132056"
+                apikey: APIConstants.apiKey
             )
 
             let carrier = try await carrierService.getCarrierInfo(
