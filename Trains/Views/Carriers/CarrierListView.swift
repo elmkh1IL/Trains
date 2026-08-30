@@ -33,28 +33,15 @@ struct CarrierListView: View {
         
         ScrollView {
             
-            VStack(
-                alignment: .leading,
-                spacing: 16
-            ) {
+            VStack(alignment: .leading, spacing: 16) {
                 
                 Text(viewModel.routeTitle)
-                    .font(
-                        .system(
-                            size: 24,
-                            weight: .bold
-                        )
-                    )
+                    .font(.system(size: 24, weight: .bold))
                 
                 if viewModel.filteredCarriers.isEmpty {
                     
                     Text("Вариантов нет")
-                        .font(
-                            .system(
-                                size: 24,
-                                weight: .bold
-                            )
-                        )
+                        .font(.system(size: 24, weight: .bold))
                         .frame(maxWidth: .infinity)
                         .padding(.top, 220)
                     
@@ -66,13 +53,11 @@ struct CarrierListView: View {
                             viewModel.filteredCarriers
                         ) { carrier in
                             
-                            NavigationLink(
-                                value: carrier
-                            ) {
-                                
-                                CarrierRow(
-                                    carrier: carrier
-                                )
+                            NavigationLink{
+                                CarrierDetailsView(carrier: carrier)
+                            } label: {
+                                CarrierRow(carrier: carrier)
+                                .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
                         }
@@ -97,9 +82,7 @@ struct CarrierListView: View {
                     dismiss()
                 } label: {
                     
-                    Image(
-                        systemName: "chevron.left"
-                    )
+                    Image(systemName: "chevron.left")
                     .foregroundStyle(.primary)
                 }
             }
@@ -114,41 +97,21 @@ struct CarrierListView: View {
             } label: {
                 
                 Text("Уточнить время")
-                    .font(
-                        .system(
-                            size: 17,
-                            weight: .bold
-                        )
-                    )
+                    .font(.system(size: 17, weight: .bold))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 60)
                     .background(AppColors.blue)
-                    .clipShape(
-                        RoundedRectangle(
-                            cornerRadius: 16
-                        )
-                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 8)
             .background(AppColors.background)
         }
         
-        .navigationDestination(
-            isPresented: $showFilters
-        ) {
+        .navigationDestination(isPresented: $showFilters){
             
-            FiltersView(
-                filter: $viewModel.filter
-            )
-        }
-        
-        .navigationDestination(
-            for: Carrier.self
-        ) { _ in
-            
-            CarrierDetailsView()
+            FiltersView(filter: $viewModel.filter)
         }
         
         .task {

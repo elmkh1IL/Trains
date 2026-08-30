@@ -23,36 +23,20 @@ struct ErrorStateView: View {
                 Image("NoInternet")
                     .resizable()
                     .scaledToFit()
-                    .frame(
-                        width: 223,
-                        height: 223
-                    )
+                    .frame(width: 223, height: 223)
 
                 Text("Нет интернета")
-                    .font(
-                        .system(
-                            size: 24,
-                            weight: .bold
-                        )
-                    )
+                    .font(.system(size: 24, weight: .bold))
 
             case .serverError:
 
                 Image("ServerError")
                     .resizable()
                     .scaledToFit()
-                    .frame(
-                        width: 223,
-                        height: 223
-                    )
+                    .frame(width: 223, height: 223)
 
                 Text("Ошибка сервера")
-                    .font(
-                        .system(
-                            size: 24,
-                            weight: .bold
-                        )
-                    )
+                    .font(.system(size: 24, weight: .bold))
 
             case .content:
 
@@ -61,10 +45,7 @@ struct ErrorStateView: View {
 
             Spacer()
         }
-        .frame(
-            maxWidth: .infinity,
-            maxHeight: .infinity
-        )
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AppColors.background)
     }
 }

@@ -17,9 +17,7 @@ struct SelectionFlowView: View {
 
         NavigationStack {
 
-            CitySelectionView(
-                onStationSelected: onStationSelected
-            )
+            CitySelectionView(onStationSelected: onStationSelected)
         }
     }
 }

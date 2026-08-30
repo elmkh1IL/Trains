@@ -20,9 +20,7 @@ struct CitySelectionView: View {
 
         VStack(spacing: 0) {
 
-            SearchField(
-                text: $viewModel.searchText
-            )
+            SearchField(text: $viewModel.searchText)
             .padding(.horizontal, 16)
             .padding(.bottom, 12)
 
@@ -36,27 +34,18 @@ struct CitySelectionView: View {
 
             } else if viewModel.screenState == .noInternet {
 
-                ErrorStateView(
-                    state: .noInternet
-                )
+                ErrorStateView(state: .noInternet)
 
             } else if viewModel.screenState == .serverError {
 
-                ErrorStateView(
-                    state: .serverError
-                )
+                ErrorStateView(state: .serverError)
 
             } else if viewModel.filteredCities.isEmpty {
 
                 Spacer()
 
                 Text("Город не найден")
-                    .font(
-                        .system(
-                            size: 24,
-                            weight: .bold
-                        )
-                    )
+                    .font(.system(size: 24, weight: .bold))
 
                 Spacer()
 
@@ -98,15 +87,8 @@ struct CitySelectionView: View {
                     dismiss()
                 } label: {
 
-                    Image(
-                        systemName: "chevron.left"
-                    )
-                    .font(
-                        .system(
-                            size: 20,
-                            weight: .semibold
-                        )
-                    )
+                    Image(systemName: "chevron.left")
+                    .font(.system(size: 20, weight: .semibold))
                     .foregroundStyle(.primary)
                 }
             }

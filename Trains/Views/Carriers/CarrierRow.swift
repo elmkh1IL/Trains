@@ -14,10 +14,7 @@ struct CarrierRow: View {
 
         VStack(spacing: 16) {
 
-            HStack(
-                alignment: .top,
-                spacing: 8
-            ) {
+            HStack(alignment: .top, spacing: 8) {
 
                 ZStack {
 
@@ -42,26 +39,12 @@ struct CarrierRow: View {
                             .foregroundStyle(.black)
                     }
                 }
-                .frame(
-                    width: 38,
-                    height: 38
-                )
-                .clipShape(
-                    RoundedRectangle(
-                        cornerRadius: 10
-                    )
-                )
+                .frame(width: 38, height: 38)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
                     .background(.white)
-                    .clipShape(
-                        RoundedRectangle(
-                            cornerRadius: 10
-                        )
-                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
 
-                VStack(
-                    alignment: .leading,
-                    spacing: 2
-                ) {
+                VStack(alignment: .leading, spacing: 2) {
 
                     Text(carrier.name)
                         .font(.system(size: 17))
@@ -105,11 +88,7 @@ struct CarrierRow: View {
         .background(
             AppColors.carrierCard
         )
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: 24
-            )
-        )
+        .clipShape(RoundedRectangle(cornerRadius: 24))
     }
 
     private var line: some View {

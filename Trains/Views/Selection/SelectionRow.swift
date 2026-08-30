@@ -20,15 +20,8 @@ struct SelectionRow: View {
 
             Spacer()
 
-            Image(
-                systemName: "chevron.right"
-            )
-            .font(
-                .system(
-                    size: 18,
-                    weight: .semibold
-                )
-            )
+            Image(systemName: "chevron.right")
+            .font(.system(size: 18, weight: .semibold))
             .foregroundStyle(.primary)
         }
         .frame(height: 60)

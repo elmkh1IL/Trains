@@ -17,10 +17,7 @@ struct SearchField: View {
             Image(systemName: "magnifyingglass")
                 .foregroundStyle(.secondary)
 
-            TextField(
-                "Введите запрос",
-                text: $text
-            )
+            TextField("Введите запрос", text: $text)
             .font(.system(size: 17))
             .foregroundStyle(.primary)
             .textInputAutocapitalization(.never)
