@@ -8,13 +8,15 @@ import SwiftUI
 
 struct RootTabView: View {
     
+    @AppStorage("isDarkMode")
+    private var isDarkMode = false
+    
     init() {
             UITabBar.appearance().tintColor = .label
             UITabBar.appearance().unselectedItemTintColor = .systemGray3
         }
 
     var body: some View {
-
         TabView {
 
             NavigationStack {
@@ -29,5 +31,6 @@ struct RootTabView: View {
                     Image(systemName: "gearshape.fill")
                 }
         }
+        .preferredColorScheme(isDarkMode ? .dark : .light)
     }
 }

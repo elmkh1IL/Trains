@@ -11,6 +11,15 @@ struct MainView: View {
     @StateObject
     private var viewModel = MainViewModel()
     
+    @StateObject
+    private var storiesViewModel = StoriesViewModel()
+    
+    @State
+    private var selectedStoryIndex = 0
+
+    @State
+    private var showStories = false
+    
     @State
     private var selectionDirection: SelectionDirection?
     
@@ -23,6 +32,17 @@ struct MainView: View {
             
             Spacer()
                 .frame(height: 32)
+            
+            StoriesCollectionView(stories: storiesViewModel.stories) {
+                index in
+                
+                selectedStoryIndex = index
+                
+                storiesViewModel.markAsViewed(at: index)
+                
+                showStories = true
+            }
+                .padding(.bottom, 28)
             
             routeView
             
@@ -67,129 +87,139 @@ struct MainView: View {
                 )
             }
         }
+        .fullScreenCover(
+            isPresented: $showStories
+        ) {
+            StoriesView(
+                stories: storiesViewModel.stories,
+                startIndex: selectedStoryIndex
+            ) { index in
+                storiesViewModel.markAsViewed(at: index)
+            }
+        }
     }
+    
+    private var routeView: some View {
         
-        private var routeView: some View {
+        HStack(spacing: 16) {
             
-            HStack(spacing: 16) {
+            VStack(
+                alignment: .leading,
+                spacing: 0
+            ) {
                 
-                VStack(
-                    alignment: .leading,
-                    spacing: 0
+                routeButton(
+                    text: viewModel.fromStation,
+                    placeholder: "Откуда"
                 ) {
-                    
-                    routeButton(
-                        text: viewModel.fromStation,
-                        placeholder: "Откуда"
-                    ) {
-                        selectionDirection = .from
-                    }
-                    
-                    routeButton(
-                        text: viewModel.toStation,
-                        placeholder: "Куда"
-                    ) {
-                        selectionDirection = .to
-                    }
+                    selectionDirection = .from
                 }
-                .background(Color.white)
-                .clipShape(
-                    RoundedRectangle(
-                        cornerRadius: 20
-                    )
-                )
                 
-                Button {
-                    
-                    viewModel.swapStations()
-                    
-                } label: {
-                    
-                    Image(
-                        systemName: "arrow.up.arrow.down"
-                    )
-                    .font(
-                        .system(
-                            size: 18,
-                            weight: .semibold
-                        )
-                    )
-                    .foregroundStyle(AppColors.blue)
-                    .frame(
-                        width: 44,
-                        height: 44
-                    )
-                    .background(Color.white)
-                    .clipShape(Circle())
+                routeButton(
+                    text: viewModel.toStation,
+                    placeholder: "Куда"
+                ) {
+                    selectionDirection = .to
                 }
             }
-            .padding(16)
-            .background(AppColors.blue)
+            .background(Color.white)
             .clipShape(
                 RoundedRectangle(
                     cornerRadius: 20
                 )
             )
-        }
-        
-        private func routeButton(
-            text: String,
-            placeholder: String,
-            action: @escaping () -> Void
-        ) -> some View {
-            
-            Button(action: action) {
-                
-                HStack {
-                    
-                    Text(
-                        text.isEmpty
-                        ? placeholder
-                        : text
-                    )
-                    .font(.system(size: 17))
-                    .foregroundStyle(
-                        text.isEmpty
-                        ? Color.gray
-                        : Color.black
-                    )
-                    .lineLimit(1)
-                    
-                    Spacer()
-                }
-                .padding(.horizontal, 16)
-                .frame(height: 48)
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-        }
-        
-        private var searchButton: some View {
             
             Button {
                 
-                showCarriers = true
+                viewModel.swapStations()
                 
             } label: {
                 
-                Text("Найти")
-                    .font(
-                        .system(
-                            size: 17,
-                            weight: .bold
-                        )
+                Image(
+                    systemName: "arrow.up.arrow.down"
+                )
+                .font(
+                    .system(
+                        size: 18,
+                        weight: .semibold
                     )
-                    .foregroundStyle(.white)
-                    .frame(
-                        width: 150,
-                        height: 60
-                    )
-                    .background(AppColors.blue)
-                    .clipShape(
-                        RoundedRectangle(
-                            cornerRadius: 16
-                        )
-                    )
+                )
+                .foregroundStyle(AppColors.blue)
+                .frame(
+                    width: 44,
+                    height: 44
+                )
+                .background(Color.white)
+                .clipShape(Circle())
             }
         }
+        .padding(16)
+        .background(AppColors.blue)
+        .clipShape(
+            RoundedRectangle(
+                cornerRadius: 20
+            )
+        )
     }
+    
+    private func routeButton(
+        text: String,
+        placeholder: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        
+        Button(action: action) {
+            
+            HStack {
+                
+                Text(
+                    text.isEmpty
+                    ? placeholder
+                    : text
+                )
+                .font(.system(size: 17))
+                .foregroundStyle(
+                    text.isEmpty
+                    ? Color.gray
+                    : Color.black
+                )
+                .lineLimit(1)
+                
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+            .frame(height: 48)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+    
+    private var searchButton: some View {
+        
+        Button {
+            
+            showCarriers = true
+            
+        } label: {
+            
+            Text("Найти")
+                .font(
+                    .system(
+                        size: 17,
+                        weight: .bold
+                    )
+                )
+                .foregroundStyle(.white)
+                .frame(
+                    width: 150,
+                    height: 60
+                )
+                .background(AppColors.blue)
+                .clipShape(
+                    RoundedRectangle(
+                        cornerRadius: 16
+                    )
+                )
+        }
+    }
+}

@@ -32,18 +32,10 @@ struct FiltersView: View {
 
     var body: some View {
 
-        VStack(
-            alignment: .leading,
-            spacing: 0
-        ) {
+        VStack(alignment: .leading, spacing: 0) {
 
             Text("Время отправления")
-                .font(
-                    .system(
-                        size: 24,
-                        weight: .bold
-                    )
-                )
+                .font(.system(size: 24, weight: .bold))
                 .padding(.top, 24)
                 .padding(.bottom, 16)
 
@@ -63,9 +55,7 @@ struct FiltersView: View {
 
                         Spacer()
 
-                        Image(
-                            systemName:
-                                viewModel.isPeriodSelected(period)
+                        Image(systemName: viewModel.isPeriodSelected(period)
                                 ? "checkmark.square.fill"
                                 : "square"
                         )
@@ -77,15 +67,8 @@ struct FiltersView: View {
                 .buttonStyle(.plain)
             }
 
-            Text(
-                "Показывать варианты с пересадками"
-            )
-            .font(
-                .system(
-                    size: 24,
-                    weight: .bold
-                )
-            )
+            Text("Показывать варианты с пересадками")
+            .font(.system(size: 24, weight: .bold))
             .padding(.top, 16)
             .padding(.bottom, 12)
 
@@ -131,21 +114,12 @@ struct FiltersView: View {
                 } label: {
 
                     Text("Применить")
-                        .font(
-                            .system(
-                                size: 17,
-                                weight: .bold
-                            )
-                        )
+                        .font(.system(size: 17, weight: .bold))
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 60)
                         .background(AppColors.blue)
-                        .clipShape(
-                            RoundedRectangle(
-                                cornerRadius: 16
-                            )
-                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 8)
