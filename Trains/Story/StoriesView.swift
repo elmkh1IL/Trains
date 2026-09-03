@@ -175,7 +175,7 @@ struct StoriesView: View {
         Button {
             dismiss()
         } label: {
-            Image("Close")
+            Image(.close)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 30, height: 30)
@@ -198,9 +198,7 @@ struct StoriesView: View {
     private func resetTimer() {
         cancellable?.cancel()
 
-        timer = Self.createTimer(
-            interval: timerTickInterval
-        )
+        timer = Self.createTimer(interval: timerTickInterval)
 
         cancellable = timer.connect()
     }

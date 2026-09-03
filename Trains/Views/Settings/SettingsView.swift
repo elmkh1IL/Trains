@@ -8,8 +8,8 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    @AppStorage("isDarkMode")
-    private var isDarkMode = false
+    @StateObject
+    private var viewModel = SettingsViewModel()
     
     @State
     private var showUserAgreement = false
@@ -25,7 +25,7 @@ struct SettingsView: View {
                     
                     Spacer()
                     
-                    Toggle("", isOn: $isDarkMode)
+                    Toggle("", isOn: $viewModel.isDarkMode)
                         .labelsHidden()
                 }
                 .frame(height: 56)
@@ -51,9 +51,8 @@ struct SettingsView: View {
             Spacer()
             
             VStack(spacing: 16) {
-                Text("Приложение использует API «Яндекс.Расписания»")
-                
-                Text("Версия 1.0 (beta)")
+                Text(viewModel.apiInformation)
+                Text(viewModel.versionInformation)
             }
             .font(.system(size: 12))
             .padding(.bottom, 24)

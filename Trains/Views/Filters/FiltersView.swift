@@ -24,10 +24,7 @@ struct FiltersView: View {
         self._filter = filter
 
         self._viewModel = StateObject(
-            wrappedValue: FiltersViewModel(
-                filter: filter.wrappedValue
-            )
-        )
+            wrappedValue: FiltersViewModel(filter: filter.wrappedValue))
     }
 
     var body: some View {
@@ -85,17 +82,13 @@ struct FiltersView: View {
 
         .toolbar {
 
-            ToolbarItem(
-                placement: .navigationBarLeading
-            ) {
+            ToolbarItem(placement: .navigationBarLeading) {
 
                 Button {
                     dismiss()
                 } label: {
 
-                    Image(
-                        systemName: "chevron.left"
-                    )
+                    Image(systemName: "chevron.left")
                     .foregroundStyle(.primary)
                 }
             }
@@ -144,10 +137,8 @@ struct FiltersView: View {
 
                 Spacer()
 
-                Image(
-                    systemName:
-                        viewModel
-                            .isTransferOptionSelected(option)
+                Image(systemName: viewModel
+                    .isTransferOptionSelected(option)
                         ? "largecircle.fill.circle"
                         : "circle"
                 )

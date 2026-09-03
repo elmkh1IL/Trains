@@ -27,16 +27,9 @@ final class MainViewModel: ObservableObject {
     var canSearch: Bool {
         !fromStation.isEmpty && !toStation.isEmpty
     }
-
-    func selectStation(
-        city: City,
-        station: Station,
-        direction: SelectionDirection
-    ) {
-        let point = RoutePoint(
-            cityName: city.name,
-            station: station
-        )
+    
+    func selectStation(city: City, station: Station, direction: SelectionDirection) {
+        let point = RoutePoint(cityName: city.name, station: station)
         
         switch direction {
         case .from:

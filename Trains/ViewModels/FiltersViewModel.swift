@@ -17,8 +17,7 @@ final class FiltersViewModel: ObservableObject {
     }
 
     var shouldShowApply: Bool {
-        !draft.periods.isEmpty ||
-        draft.transfers != nil
+        !draft.periods.isEmpty || draft.transfers != nil
     }
 
     func togglePeriod(_ period: DeparturePeriod) {

@@ -24,7 +24,7 @@ final class CitySelectionViewModel: ObservableObject {
     private let service: StationsServiceProtocol
 
     init(
-        service: StationsServiceProtocol = StationsService.shared
+        service: any StationsServiceProtocol = StationsService.shared
     ) {
         self.service = service
     }
@@ -55,19 +55,21 @@ final class CitySelectionViewModel: ObservableObject {
         }
 
         do {
-
-            cities = try await service.getCities()
-
+            
+            let loadedCities = try await service.getCities()
+            
+            cities = loadedCities
             screenState = .content
-
+            
+        } catch is CancellationError {
+            return
         } catch {
-
+            
             print("loadCities error:", error)
             
             let nsError = error as NSError
 
-            if nsError.domain == NSURLErrorDomain,
-               nsError.code == NSURLErrorNotConnectedToInternet {
+            if nsError.domain == NSURLErrorDomain, nsError.code == NSURLErrorNotConnectedToInternet {
 
                 screenState = .noInternet
 

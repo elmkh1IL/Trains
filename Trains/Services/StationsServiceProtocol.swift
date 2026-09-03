@@ -6,6 +6,6 @@
 //
 import Foundation
 
-protocol StationsServiceProtocol {
+protocol StationsServiceProtocol: Sendable {
     func getCities() async throws -> [City]
 }

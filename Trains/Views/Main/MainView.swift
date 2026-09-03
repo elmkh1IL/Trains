@@ -81,19 +81,14 @@ struct MainView: View {
             if let fromPoint = viewModel.fromPoint,
                let toPoint = viewModel.toPoint {
                 
-                CarrierListView(
-                    fromPoint: fromPoint,
-                    toPoint: toPoint
-                )
+                CarrierListView(fromPoint: fromPoint, toPoint: toPoint)
             }
         }
         .fullScreenCover(
             isPresented: $showStories
         ) {
-            StoriesView(
-                stories: storiesViewModel.stories,
-                startIndex: selectedStoryIndex
-            ) { index in
+            StoriesView(stories: storiesViewModel.stories, startIndex: selectedStoryIndex)
+            { index in
                 storiesViewModel.markAsViewed(at: index)
             }
         }
@@ -103,86 +98,46 @@ struct MainView: View {
         
         HStack(spacing: 16) {
             
-            VStack(
-                alignment: .leading,
-                spacing: 0
-            ) {
+            VStack(alignment: .leading, spacing: 0){
                 
-                routeButton(
-                    text: viewModel.fromStation,
-                    placeholder: "Откуда"
-                ) {
+                routeButton(text: viewModel.fromStation, placeholder: "Откуда") {
                     selectionDirection = .from
                 }
                 
-                routeButton(
-                    text: viewModel.toStation,
-                    placeholder: "Куда"
-                ) {
+                routeButton(text: viewModel.toStation, placeholder: "Куда") {
                     selectionDirection = .to
                 }
             }
             .background(Color.white)
-            .clipShape(
-                RoundedRectangle(
-                    cornerRadius: 20
-                )
-            )
+            .clipShape(RoundedRectangle(cornerRadius: 20))
             
             Button {
-                
                 viewModel.swapStations()
                 
             } label: {
                 
-                Image(
-                    systemName: "arrow.up.arrow.down"
-                )
-                .font(
-                    .system(
-                        size: 18,
-                        weight: .semibold
-                    )
-                )
+                Image(systemName: "arrow.up.arrow.down")
+                .font(.system(size: 18, weight: .semibold))
                 .foregroundStyle(AppColors.blue)
-                .frame(
-                    width: 44,
-                    height: 44
-                )
+                .frame(width: 44, height: 44)
                 .background(Color.white)
                 .clipShape(Circle())
             }
         }
         .padding(16)
         .background(AppColors.blue)
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: 20
-            )
-        )
+        .clipShape(RoundedRectangle(cornerRadius: 20))
     }
     
-    private func routeButton(
-        text: String,
-        placeholder: String,
-        action: @escaping () -> Void
-    ) -> some View {
+    private func routeButton(text: String, placeholder: String, action: @escaping () -> Void) -> some View {
         
         Button(action: action) {
             
             HStack {
                 
-                Text(
-                    text.isEmpty
-                    ? placeholder
-                    : text
-                )
+                Text(text.isEmpty ? placeholder : text)
                 .font(.system(size: 17))
-                .foregroundStyle(
-                    text.isEmpty
-                    ? Color.gray
-                    : Color.black
-                )
+                .foregroundStyle(text.isEmpty ? Color.gray : Color.black)
                 .lineLimit(1)
                 
                 Spacer()
@@ -204,22 +159,11 @@ struct MainView: View {
             
             Text("Найти")
                 .font(
-                    .system(
-                        size: 17,
-                        weight: .bold
-                    )
-                )
+                    .system(size: 17, weight: .bold))
                 .foregroundStyle(.white)
-                .frame(
-                    width: 150,
-                    height: 60
-                )
+                .frame(width: 150, height: 60)
                 .background(AppColors.blue)
-                .clipShape(
-                    RoundedRectangle(
-                        cornerRadius: 16
-                    )
-                )
+                .clipShape(RoundedRectangle(cornerRadius: 16))
         }
     }
 }
