@@ -7,6 +7,9 @@
 import SwiftUI
 
 struct UserAgreementView: View {
+    
+    @StateObject
+    private var viewModel = UserAgreementViewModel()
 
     @Environment(\.dismiss)
     private var dismiss
@@ -25,7 +28,7 @@ struct UserAgreementView: View {
 
                 Spacer()
 
-                Text("Пользовательское соглашение")
+                Text("viewModel.title")
                     .font(.system(size: 17, weight: .semibold))
 
                 Spacer()
@@ -37,7 +40,7 @@ struct UserAgreementView: View {
             .padding(.top, 12)
 
             ScrollView {
-                Text("Текст пользовательского соглашения...")
+                Text(viewModel.agreementText)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(16)
             }

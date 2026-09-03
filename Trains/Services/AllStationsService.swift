@@ -4,18 +4,17 @@
 //
 //  Created by el on 13.08.2026.
 //
-
 import OpenAPIRuntime
 import OpenAPIURLSession
 import Foundation
 
 typealias AllStations = Components.Schemas.AllStationsResponse
 
-protocol AllStationsServiceProtocol {
+protocol AllStationsServiceProtocol: Sendable {
     func getAllStations() async throws -> AllStations
 }
 
-final class AllStationsService: AllStationsServiceProtocol {
+struct AllStationsService: AllStationsServiceProtocol {
     
     private let client: Client
     private let apikey: String
@@ -43,15 +42,9 @@ final class AllStationsService: AllStationsServiceProtocol {
             
             let limit = 50 * 1024 * 1024
             
-            let fullData = try await Data(
-                collecting: body,
-                upTo: limit
-            )
+            let fullData = try await Data(collecting: body, upTo: limit)
             
-            let allStations = try JSONDecoder().decode(
-                AllStations.self,
-                from: fullData
-            )
+            let allStations = try JSONDecoder().decode(AllStations.self, from: fullData)
             
             return allStations
         }
@@ -65,19 +58,19 @@ func testFetchAllStations() {
                 serverURL: try Servers.Server1.url(),
                 transport: URLSessionTransport()
             )
-
+            
             let service = AllStationsService(
                 client: client,
                 apikey: APIConstants.apiKey
             )
-
+            
             print("Fetching all stations...")
-
+            
             let stations = try await service.getAllStations()
-
+            
             print("Successfully fetched all stations:")
             print(stations)
-
+            
         } catch {
             print("Error fetching all stations: \(error)")
         }

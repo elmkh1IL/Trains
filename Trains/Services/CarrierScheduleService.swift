@@ -7,44 +7,27 @@
 import Foundation
 import OpenAPIURLSession
 
-protocol CarrierScheduleServiceProtocol {
+protocol CarrierScheduleServiceProtocol: Sendable {
+    
     func getCarriers(from: String, to: String) async throws -> [Carrier]
 }
 
-final class CarrierScheduleService: CarrierScheduleServiceProtocol {
+struct CarrierScheduleService: CarrierScheduleServiceProtocol {
     
     static let shared = CarrierScheduleService()
     
-    private let scheduleService:
-    ScheduleBetweenStationsServiceProtocol
-    
-    private init() {
-        
-        let client = Client(
-            serverURL: try! Servers.Server1.url(),
-            transport: URLSessionTransport()
-        )
-        
-        scheduleService =
-        ScheduleBetweenStationsService(
-            client: client,
-            apikey: APIConstants.apiKey
-        )
-    }
+    private let networkClient: any NetworkClientProtocol
     
     init(
-        scheduleService:
-        ScheduleBetweenStationsServiceProtocol
+        networkClient: any NetworkClientProtocol = NetworkClient.shared
     ) {
-        self.scheduleService = scheduleService
+        self.networkClient = networkClient
     }
     
     func getCarriers(from: String, to: String) async throws -> [Carrier] {
-        
         let requestDate = makeRequestDate()
         
-        let result =
-        try await scheduleService
+        let result = try await networkClient
             .getScheduleBetweenStations(
                 fromStation: from,
                 toStation: to,
@@ -53,11 +36,9 @@ final class CarrierScheduleService: CarrierScheduleServiceProtocol {
             )
         
         let segments = result.segments ?? []
-        
         var carriers: [Carrier] = []
         
         for segment in segments {
-            
             guard
                 let departure = segment.departure,
                 let arrival = segment.arrival,
@@ -74,7 +55,9 @@ final class CarrierScheduleService: CarrierScheduleServiceProtocol {
                 departureTime: formatTime(departure),
                 arrivalTime: formatTime(arrival),
                 duration: formatDuration(segment.duration ?? 0),
-                transferText: segment.has_transfers == true ? "С пересадкой" : nil,
+                transferText: segment.has_transfers == true
+                ? "С пересадкой"
+                : nil,
                 hasTransfer: segment.has_transfers ?? false,
                 departureHour: getHour(from: departure)
             )
@@ -89,36 +72,26 @@ final class CarrierScheduleService: CarrierScheduleServiceProtocol {
         
         let formatter = DateFormatter()
         
-        formatter.locale =
-        Locale(identifier: "en_US_POSIX")
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         
-        formatter.dateFormat =
-        "yyyy-MM-dd"
+        formatter.dateFormat = "yyyy-MM-dd"
         
-        return formatter.string(
-            from: Date()
-        )
+        return formatter.string(from: Date())
     }
     
     private func makeLogoURL(from logo: String?) -> URL? {
         
-        guard
-            let logo,
-            !logo.isEmpty
+        guard let logo, !logo.isEmpty
         else {
             return nil
         }
         
         if logo.hasPrefix("//") {
             
-            return URL(
-                string: "https:\(logo)"
-            )
+            return URL(string: "https:\(logo)")
         }
         
-        return URL(
-            string: logo
-        )
+        return URL(string: logo)
     }
     
     private func formatDate(_ departure: String, fallbackDate: String) -> String {
@@ -127,59 +100,38 @@ final class CarrierScheduleService: CarrierScheduleServiceProtocol {
         
         if departure.contains("T") {
             
-            let parts =
-            departure.split(
-                separator: "T"
-            )
+            let parts = departure.split(separator: "T")
             
             guard let firstPart = parts.first
             else {
                 return fallbackDate
             }
             
-            dateString =
-            String(firstPart)
+            dateString = String(firstPart)
             
         } else {
             
-            dateString =
-            fallbackDate
+            dateString = fallbackDate
         }
         
-        let inputFormatter =
-        DateFormatter()
+        let inputFormatter = DateFormatter()
         
-        inputFormatter.locale =
-        Locale(
-            identifier: "en_US_POSIX"
-        )
+        inputFormatter.locale = Locale(identifier: "en_US_POSIX")
         
-        inputFormatter.dateFormat =
-        "yyyy-MM-dd"
+        inputFormatter.dateFormat = "yyyy-MM-dd"
         
-        guard
-            let date =
-                inputFormatter.date(
-                    from: dateString
-                )
+        guard let date = inputFormatter.date(from: dateString)
         else {
             return dateString
         }
         
-        let outputFormatter =
-        DateFormatter()
+        let outputFormatter = DateFormatter()
         
-        outputFormatter.locale =
-        Locale(
-            identifier: "ru_RU"
-        )
+        outputFormatter.locale = Locale(identifier: "ru_RU")
         
-        outputFormatter.dateFormat =
-        "d MMMM"
+        outputFormatter.dateFormat = "d MMMM"
         
-        return outputFormatter.string(
-            from: date
-        )
+        return outputFormatter.string(from: date)
     }
     
     private func formatTime(_ dateString: String) -> String {
@@ -188,28 +140,21 @@ final class CarrierScheduleService: CarrierScheduleServiceProtocol {
         
         if dateString.contains("T") {
             
-            let parts =
-            dateString.split(
-                separator: "T"
-            )
+            let parts = dateString.split(separator: "T")
             
             guard parts.count > 1
             else {
                 return dateString
             }
             
-            timeString =
-            String(parts[1])
+            timeString = String(parts[1])
             
         } else {
             
-            timeString =
-            dateString
+            timeString = dateString
         }
         
-        return String(
-            timeString.prefix(5)
-        )
+        return String(timeString.prefix(5))
     }
     
     private func getHour(from dateString: String) -> Int {
@@ -218,27 +163,21 @@ final class CarrierScheduleService: CarrierScheduleServiceProtocol {
         
         if dateString.contains("T") {
             
-            let parts =
-            dateString.split(
-                separator: "T"
-            )
+            let parts = dateString.split(separator: "T")
             
             guard parts.count > 1
             else {
                 return 0
             }
             
-            timeString =
-            String(parts[1])
+            timeString = String(parts[1])
             
         } else {
             
-            timeString =
-            dateString
+            timeString = dateString
         }
         
-        let hourString =
-        timeString
+        let hourString = timeString
             .split(separator: ":")
             .first
         
@@ -252,11 +191,9 @@ final class CarrierScheduleService: CarrierScheduleServiceProtocol {
     
     private func formatDuration(_ seconds: Int) -> String {
         
-        let hours =
-        seconds / 3600
+        let hours = seconds / 3600
         
-        let minutes =
-        seconds % 3600 / 60
+        let minutes = seconds % 3600 / 60
         
         if minutes == 0 {
             return "\(hours) ч"
@@ -265,3 +202,4 @@ final class CarrierScheduleService: CarrierScheduleServiceProtocol {
         return "\(hours) ч \(minutes) мин"
     }
 }
+

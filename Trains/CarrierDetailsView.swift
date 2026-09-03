@@ -5,8 +5,6 @@
 //  Created by el on 16.08.2026.
 //
 import SwiftUI
-import OpenAPIRuntime
-import OpenAPIURLSession
 
 struct CarrierDetailsView: View {
 
@@ -17,22 +15,7 @@ struct CarrierDetailsView: View {
     private var viewModel: CarrierDetailsViewModel
 
     init(carrier: Carrier) {
-        let client = Client(
-            serverURL: try! Servers.Server1.url(),
-            transport: URLSessionTransport()
-        )
-
-        let service = CarrierInfoService(
-            client: client,
-            apikey: APIConstants.apiKey
-        )
-
-        _viewModel = StateObject(
-            wrappedValue: CarrierDetailsViewModel(
-                carrier: carrier,
-                service: service
-            )
-        )
+        _viewModel = StateObject(wrappedValue: CarrierDetailsViewModel(carrier: carrier))
     }
 
     var body: some View {

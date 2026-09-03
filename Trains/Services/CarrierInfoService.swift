@@ -8,13 +8,14 @@
 import OpenAPIRuntime
 import OpenAPIURLSession
 
-typealias CarrierInfoResponse  = Components.Schemas.CarrierResponse
+typealias CarrierInfoResponse = Components.Schemas.CarrierResponse
 
-protocol CarrierInfoServiceProtocol {
+protocol CarrierInfoServiceProtocol: Sendable {
+    
     func getCarrierInfo(code: String) async throws -> CarrierInfoResponse
 }
 
-final class CarrierInfoService: CarrierInfoServiceProtocol {
+struct CarrierInfoService: CarrierInfoServiceProtocol {
     
     private let client: Client
     private let apikey: String
@@ -25,63 +26,8 @@ final class CarrierInfoService: CarrierInfoServiceProtocol {
     }
     
     func getCarrierInfo(code: String) async throws -> CarrierInfoResponse {
-        
-        let response = try await client.getCarrierInfo(query: .init(
-            apikey: apikey,
-            code: code
-        ))
+        let response = try await client.getCarrierInfo(query: .init(apikey: apikey, code: code))
         
         return try response.ok.body.json
-    }
-}
-
-func testFetchCarrierInfo() {
-    Task {
-        do {
-            let client = Client(
-                serverURL: try Servers.Server1.url(),
-                transport: URLSessionTransport()
-            )
-
-            let scheduleService = ScheduleBetweenStationsService(
-                client: client,
-                apikey: APIConstants.apiKey
-            )
-
-            let schedule = try await scheduleService.getScheduleBetweenStations(
-                fromStation: "c146",
-                toStation: "c213",
-                date: "2026-08-18",
-                transfers: true
-            )
-
-            guard let carrierCode = schedule
-                .segments?
-                .first?
-                .thread?
-                .carrier?
-                .code else {
-
-                print("Could not find carrier code")
-                return
-            }
-
-            print("Found carrier code: \(carrierCode)")
-
-            let carrierService = CarrierInfoService(
-                client: client,
-                apikey: APIConstants.apiKey
-            )
-
-            let carrier = try await carrierService.getCarrierInfo(
-                code: String(carrierCode)
-            )
-
-            print("Successfully fetched carrier info:")
-            print(carrier)
-
-        } catch {
-            print("Error fetching carrier info: \(error)")
-        }
     }
 }

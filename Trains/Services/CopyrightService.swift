@@ -8,13 +8,16 @@
 import OpenAPIRuntime
 import OpenAPIURLSession
 
+import OpenAPIRuntime
+
 typealias CopyrightResponse = Components.Schemas.CopyrightResponse
 
-protocol CopyrightProtocol {
+protocol CopyrightProtocol: Sendable {
+    
     func getCopyright(format: String) async throws -> CopyrightResponse
 }
 
-final class CopyrightService: CopyrightProtocol {
+struct CopyrightService: CopyrightProtocol {
     
     private let client: Client
     private let apikey: String
@@ -25,11 +28,12 @@ final class CopyrightService: CopyrightProtocol {
     }
     
     func getCopyright(format: String) async throws -> CopyrightResponse {
-        
-        let response = try await client.getCopyright(query: .init(
-            apikey: apikey,
-            format: format
-        ))
+        let response = try await client.getCopyright(
+            query: .init(
+                apikey: apikey,
+                format: format
+            )
+        )
         
         return try response.ok.body.json
     }
@@ -43,21 +47,21 @@ func testFetchCopyright() {
                 serverURL: try Servers.Server1.url(),
                 transport: URLSessionTransport()
             )
-
+            
             let service = CopyrightService(
                 client: client,
                 apikey: APIConstants.apiKey
             )
-
+            
             print("Fetching copyright...")
-
+            
             let copyright = try await service.getCopyright(
                 format: "json"
             )
-
+            
             print("Successfully fetched copyright:")
             print(copyright)
-
+            
         } catch {
             print("Error fetching copyright: \(error)")
         }

@@ -92,9 +92,7 @@ struct StationSelectionView: View {
                     dismiss()
                 } label: {
 
-                    Image(
-                        systemName: "chevron.left"
-                    )
+                    Image(systemName: "chevron.left")
                     .foregroundStyle(.primary)
                 }
             }

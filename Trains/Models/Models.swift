@@ -6,7 +6,7 @@
 //
 import Foundation
 
-enum SelectionDirection: String, Identifiable {
+enum SelectionDirection: String, Identifiable, Sendable {
     case from
     case to
 
@@ -15,7 +15,7 @@ enum SelectionDirection: String, Identifiable {
     }
 }
 
-struct Station: Identifiable, Hashable {
+struct Station: Identifiable, Hashable, Sendable {
     let id: UUID
     let name: String
     let code: String
@@ -27,7 +27,7 @@ struct Station: Identifiable, Hashable {
     }
 }
 
-struct RoutePoint: Hashable {
+struct RoutePoint: Hashable, Sendable {
     let cityName: String
     let station: Station
 
@@ -36,7 +36,7 @@ struct RoutePoint: Hashable {
     }
 }
 
-struct City: Identifiable, Hashable {
+struct City: Identifiable, Hashable, Sendable {
     let id: UUID
     let name: String
     let stations: [Station]
@@ -52,7 +52,7 @@ struct City: Identifiable, Hashable {
     }
 }
 
-struct Carrier: Identifiable, Hashable {
+struct Carrier: Identifiable, Hashable, Sendable {
     let id: UUID
     let name: String
     let logoURL: URL?
@@ -96,7 +96,8 @@ enum DeparturePeriod:
     String,
     CaseIterable,
     Identifiable,
-    Hashable {
+    Hashable,
+    Sendable {
 
     case morning = "Утро 06:00 - 12:00"
     case day = "День 12:00 - 18:00"
@@ -126,9 +127,7 @@ enum DeparturePeriod:
     }
 }
 
-enum TransferOption:
-    String,
-    Identifiable {
+enum TransferOption: String, Identifiable, Sendable {
 
     case yes = "Да"
     case no = "Нет"
@@ -138,7 +137,7 @@ enum TransferOption:
     }
 }
 
-struct ScheduleFilter: Equatable {
+struct ScheduleFilter: Equatable, Sendable {
 
     var periods:
         Set<DeparturePeriod> = []
@@ -147,7 +146,7 @@ struct ScheduleFilter: Equatable {
         TransferOption?
 }
 
-enum ScreenState {
+enum ScreenState: Sendable  {
     case content
     case noInternet
     case serverError

@@ -8,31 +8,34 @@
 import OpenAPIRuntime
 import OpenAPIURLSession
 
+import OpenAPIRuntime
+
 typealias StationScheduleResponse = Components.Schemas.ScheduleResponse
 
-protocol StationScheduleServiceProtocol {
+protocol StationScheduleServiceProtocol: Sendable {
+
     func getStationSchedule(station: String) async throws -> StationScheduleResponse
 }
 
-final class StationScheduleService: StationScheduleServiceProtocol {
-    
+struct StationScheduleService: StationScheduleServiceProtocol {
+
     private let client: Client
     private let apikey: String
-    
-    init(client: Client, apikey: String) {
+
+    init(client: Client, apikey: String
+    ) {
         self.client = client
         self.apikey = apikey
     }
-    
+
     func getStationSchedule(station: String) async throws -> StationScheduleResponse {
-        
         let response = try await client.getStationSchedule(
             query: .init(
                 apikey: apikey,
                 station: station
             )
         )
-        
+
         return try response.ok.body.json
     }
 }
@@ -45,16 +48,11 @@ func testFetchStationSchedule() {
                 transport: URLSessionTransport()
             )
 
-            let service = StationScheduleService(
-                client: client,
-                apikey: APIConstants.apiKey
-            )
+            let service = StationScheduleService(client: client, apikey: APIConstants.apiKey)
 
             print("Fetching station schedule...")
 
-            let schedule = try await service.getStationSchedule(
-                station: "s9600213"
-            )
+            let schedule = try await service.getStationSchedule(station: "s9600213")
 
             print("Successfully fetched station schedule:")
             print(schedule)

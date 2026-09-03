@@ -25,54 +25,40 @@ final class CarrierListViewModel: ObservableObject {
     @Published
     private(set) var screenState: ScreenState = .content
 
-    private let service:
-        CarrierScheduleServiceProtocol
+    private let service: CarrierScheduleServiceProtocol
 
     init(
         fromPoint: RoutePoint,
         toPoint: RoutePoint,
-        service: CarrierScheduleServiceProtocol =
-            CarrierScheduleService.shared
+        service: CarrierScheduleServiceProtocol = CarrierScheduleService.shared
     ) {
         self.fromPoint = fromPoint
         self.toPoint = toPoint
         self.service = service
     }
 
-    var routeTitle: String {
-        "\(fromPoint.displayTitle) → \(toPoint.displayTitle)"
-    }
+    var routeTitle: String { "\(fromPoint.displayTitle) → \(toPoint.displayTitle)" }
 
     var filteredCarriers: [Carrier] {
 
         allCarriers.filter { carrier in
 
             let timeMatches =
-                filter.periods.isEmpty ||
-                filter.periods.contains { period in
-                    period.contains(
-                        hour: carrier.departureHour
-                    )
+                filter.periods.isEmpty || filter.periods.contains { period in
+                    period.contains(hour: carrier.departureHour)
                 }
 
             let transferMatches: Bool
 
             switch filter.transfers {
 
-            case .yes:
-                transferMatches =
-                    carrier.hasTransfer
+            case .yes: transferMatches = carrier.hasTransfer
 
-            case .no:
-                transferMatches =
-                    !carrier.hasTransfer
+            case .no: transferMatches = !carrier.hasTransfer
 
-            case nil:
-                transferMatches = true
-            }
+            case nil: transferMatches = true }
 
-            return timeMatches &&
-                transferMatches
+            return timeMatches && transferMatches
         }
     }
 
@@ -90,11 +76,7 @@ final class CarrierListViewModel: ObservableObject {
 
         do {
 
-            let carriers =
-                try await service.getCarriers(
-                    from: fromPoint.station.code,
-                    to: toPoint.station.code
-                )
+            let carriers = try await service.getCarriers(from: fromPoint.station.code, to: toPoint.station.code)
 
             allCarriers = carriers
             screenState = .content
@@ -107,9 +89,7 @@ final class CarrierListViewModel: ObservableObject {
 
             let nsError = error as NSError
 
-            if nsError.domain == NSURLErrorDomain,
-               nsError.code ==
-                NSURLErrorNotConnectedToInternet {
+            if nsError.domain == NSURLErrorDomain, nsError.code == NSURLErrorNotConnectedToInternet {
 
                 screenState = .noInternet
 

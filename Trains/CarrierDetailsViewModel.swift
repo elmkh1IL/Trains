@@ -4,7 +4,6 @@
 //
 //  Created by el on 28.08.2026.
 //
-
 import Foundation
 import Combine
 
@@ -21,24 +20,22 @@ final class CarrierDetailsViewModel: ObservableObject {
     private(set) var errorMessage: String?
     
     private let carrier: Carrier
-    private let service: CarrierInfoServiceProtocol
+    private let networkClient: any NetworkClientProtocol
     
     init(
         carrier: Carrier,
-        service: CarrierInfoServiceProtocol
+        networkClient: any NetworkClientProtocol = NetworkClient.shared
     ) {
         self.carrier = carrier
-        self.service = service
+        self.networkClient = networkClient
     }
     
     var name: String {
-        carrierInfo?.carrier?.title
-        ?? carrier.name
+        carrierInfo?.carrier?.title ?? carrier.name
     }
     
     var email: String {
-        guard let email = carrierInfo?.carrier?.email,
-              !email.isEmpty else {
+        guard let email = carrierInfo?.carrier?.email, !email.isEmpty else {
             return isLoading ? "Загрузка..." : "Нет данных"
         }
         
@@ -46,8 +43,7 @@ final class CarrierDetailsViewModel: ObservableObject {
     }
     
     var phone: String {
-        guard let phone = carrierInfo?.carrier?.phone,
-              !phone.isEmpty else {
+        guard let phone = carrierInfo?.carrier?.phone, !phone.isEmpty else {
             return isLoading ? "Загрузка..." : "Нет данных"
         }
         
@@ -55,8 +51,7 @@ final class CarrierDetailsViewModel: ObservableObject {
     }
     
     var logoURL: URL? {
-        guard let logo = carrierInfo?.carrier?.logo,
-              !logo.isEmpty else {
+        guard let logo = carrierInfo?.carrier?.logo, !logo.isEmpty else {
             return carrier.logoURL
         }
         
@@ -69,8 +64,11 @@ final class CarrierDetailsViewModel: ObservableObject {
     
     func loadCarrierInfo() async {
         
+        guard carrierInfo == nil, !isLoading else {
+                    return
+                }
+        
         guard let code = carrier.code else {
-            
             errorMessage = "Не найден код перевозчика"
             return
         }
@@ -82,10 +80,16 @@ final class CarrierDetailsViewModel: ObservableObject {
         }
         
         do {
-            carrierInfo = try await service.getCarrierInfo(
-                code: String(code))
+            let info = try await networkClient.getCarrierInfo(code: String(code))
+            try Task.checkCancellation()
             
+            carrierInfo = info
+            errorMessage = nil
+            
+        } catch is CancellationError  {
+            return
         } catch {
+            
             print("Carrier info request error:", error)
             errorMessage = error.localizedDescription
         }

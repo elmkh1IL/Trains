@@ -20,7 +20,7 @@ struct ErrorStateView: View {
 
             case .noInternet:
 
-                Image("NoInternet")
+                Image(.noInternet)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 223, height: 223)
@@ -30,7 +30,7 @@ struct ErrorStateView: View {
 
             case .serverError:
 
-                Image("ServerError")
+                Image(.serverError)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 223, height: 223)

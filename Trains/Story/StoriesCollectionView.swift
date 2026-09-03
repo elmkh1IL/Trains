@@ -12,10 +12,7 @@ struct StoriesCollectionView: View {
     let onStoryTap: (Int) -> Void
     
     var body: some View {
-        ScrollView(
-            .horizontal,
-            showsIndicators: false
-        ) {
+        ScrollView(.horizontal) {
             LazyHStack(spacing: 12) {
                 
                 ForEach(Array(stories.enumerated()),
@@ -31,6 +28,8 @@ struct StoriesCollectionView: View {
                 }
             }
         }
+        .scrollIndicators(.hidden)
+        .scrollClipDisabled()
         .frame(height: 140)
     }
 }
